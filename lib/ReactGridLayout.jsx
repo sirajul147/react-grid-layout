@@ -56,6 +56,7 @@ export type Props = {
   containerPadding: [number, number] | null,
   rowHeight: number,
   maxRows: number,
+  maxHeight: number,
   isDraggable: boolean,
   isResizable: boolean,
   preventCollision: boolean,
@@ -144,6 +145,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     // an item past the barrier. They can push items beyond the barrier, though.
     // Intentionally not documented for this reason.
     maxRows: PropTypes.number,
+    maxHeight: PropTypes.number,
 
     //
     // Flags
@@ -209,6 +211,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     containerPadding: null,
     rowHeight: 150,
     maxRows: Infinity, // infinite vertical growth
+    maxHeight: Infinity, // infinite vertical growth
     layout: [],
     margin: [10, 10],
     isDraggable: true,
@@ -300,11 +303,13 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     const containerPaddingY = this.props.containerPadding
       ? this.props.containerPadding[1]
       : this.props.margin[1];
-    return (
+    const height =
       nbRow * this.props.rowHeight +
       (nbRow - 1) * this.props.margin[1] +
-      containerPaddingY * 2 +
-      "px"
+      containerPaddingY * 2;
+
+    return (
+      (height > this.props.maxHeight ? this.props.maxHeight : height) + "px"
     );
   }
 
